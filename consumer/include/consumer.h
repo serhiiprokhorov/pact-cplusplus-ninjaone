@@ -3,7 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <pact.h>
+#include "pact_ninjaone.h"
 #include <filesystem>
 #include <optional>
 #include <functional>
@@ -227,6 +227,7 @@ namespace pact_consumer {
      */
     Interaction withResponseMultipartFileUpload(const std::string& part_name, const std::string& content_type, const std::filesystem::path& example_file) const;
 
+    // https://ninjarmm.atlassian.net/wiki/spaces/ND/pages/3210149900/Crash+investigation
     InteractionHandle interaction;
 
     private:
