@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 
+#added by Serhii Prokhorov
+cmake_policy(SET CMP0091 NEW)
+
 # set the project name
 project(pact-consumer-tests)
 

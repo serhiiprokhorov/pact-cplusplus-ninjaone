@@ -371,3 +371,83 @@ cmake --build . --config Release
 ```
 cmake --install . --prefix install
 ```
+
+## Building the library x86 NinjaRMMAgent
+
+Complete steps 1..5 in above section "Building the library"
+
+6. Create conan profile
+
+~\.conan\profiles\x64_to_x86 
+```
+[settings]
+os=Windows
+os_build=Windows
+arch=x86
+arch_build=x86_64
+compiler=Visual Studio
+compiler.version=16
+[options]
+[build_requires]
+[conf]
+tools.microsoft.msbuild:verbosity=detailed
+tools.microsoft.msbuild:max_cpu_count=2
+tools.microsoft.msbuild:vs_version=16
+tools.build:jobs=10
+tools.build:defines+=["_NO_ASYNCRTIMP"]
+tools.build:cxxflags+=["/EHsc"]
+[env]
+CONAN_PRINT_RUN_COMMANDS=1
+CONAN_REVISIONS_ENABLED=1
+```
+
+7. use conan to install all the dependencies
+
+```
+conan remote add pact-foundation https://pactfoundation.jfrog.io/artifactory/api/conan/pactfoundation-conan
+conan install -s build_type=Debug -s compiler.runtime=MTd --profile=C:\Users\Serhii.Prokhorov\.conan\profiles\x64_to_x86 ..> 1.txt
+```
+Note: it may be useful to create separate conan profiles for Debug/Release
+```
+[settings]
+...
+compiler.runtime=MTd
+build_type=Debug
+```
+or
+```
+[settings]
+...
+compiler.runtime=MT
+build_type=Release
+```
+
+8. build pact_ffi x86 Debug
+
+Note: conan downloads x64 pact_ffi.lib , manual build is required for x86.
+
+clone https://github.com/pact-foundation/pact-reference.git
+follow README.md instructions
+
+To build the libraries in this project, you need a working Rust environment.  Requires minimum Rust 1.59.0.
+Refer to the [Rust Guide](https://www.rust-lang.org/learn/get-started).
+
+The build tool used is `cargo`.
+
+```shell
+cd rust
+cargo build
+```
+
+This will compile all the libraries and put the generated files in `rust/target/debug`.
+
+
+9. Copy pact_ffi x86
+
+rust/target/debug -> {source location}\pact-cplusplus\consumer\build\src\lib\pact-cpp-consumer.lib 
+
+8. use cmake to build the library
+```
+cmake .. -A Win32 --log-level=TRACE --trace-expand > 3.txt 2>&1
+cmake --build . --config Debug -A Win32 --log-level=DEBUG --trace-expand > 2.txt
+```
