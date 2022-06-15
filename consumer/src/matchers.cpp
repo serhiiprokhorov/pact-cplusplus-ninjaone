@@ -1,5 +1,5 @@
 #include "matchers.h"
-#include <pact.h>
+#include <pact-c++.h>
 #include <iostream>
 #include <nlohmann/json.hpp>
 
@@ -297,12 +297,12 @@ namespace pact_consumer::matchers {
     } else {
       j["pact:generator:type"] = "DateTime";
       auto result = pactffi_generate_datetime_string(format.data());
-      if (result.tag == StringResult_Ok) {
-        j["value"] = result.ok;
-        pactffi_free_string(result.ok);
+      if (result.tag == StringResult::Tag::StringResult_Ok) {
+        j["value"] = result.ok._0;
+        pactffi_free_string(result.ok._0);
       } else {
-        std::string error = result.failed;
-        pactffi_free_string(result.failed);
+        std::string error = result.failed._0;
+        pactffi_free_string(result.failed._0);
         BOOST_THROW_EXCEPTION(std::runtime_error(error));
       }
     }
@@ -318,12 +318,12 @@ namespace pact_consumer::matchers {
     } else {
       j["pact:generator:type"] = "Date";
       auto result = pactffi_generate_datetime_string(format.data());
-      if (result.tag == StringResult_Ok) {
-        j["value"] = result.ok;
-        pactffi_free_string(result.ok);
+      if (result.tag == StringResult::Tag::StringResult_Ok) {
+        j["value"] = result.ok._0;
+        pactffi_free_string(result.ok._0);
       } else {
-        std::string error = result.failed;
-        pactffi_free_string(result.failed);
+        std::string error = result.failed._0;
+        pactffi_free_string(result.failed._0);
         BOOST_THROW_EXCEPTION(std::runtime_error(error));
       }
     }
@@ -339,12 +339,12 @@ namespace pact_consumer::matchers {
     } else {
       j["pact:generator:type"] = "Time";
       auto result = pactffi_generate_datetime_string(format.data());
-      if (result.tag == StringResult_Ok) {
-        j["value"] = result.ok;
-        pactffi_free_string(result.ok);
+      if (result.tag == StringResult::Tag::StringResult_Ok) {
+        j["value"] = result.ok._0;
+        pactffi_free_string(result.ok._0);
       } else {
-        std::string error = result.failed;
-        pactffi_free_string(result.failed);
+        std::string error = result.failed._0;
+        pactffi_free_string(result.failed._0);
         BOOST_THROW_EXCEPTION(std::runtime_error(error));
       }
     }
@@ -366,13 +366,13 @@ namespace pact_consumer::matchers {
     } else {
       j["pact:generator:type"] = "Regex";
       auto result = pactffi_generate_regex_value(regex.data());
-      if (result.tag == StringResult_Ok) {
-        std::string value = result.ok;
+      if (result.tag == StringResult::Tag::StringResult_Ok) {
+        std::string value = result.ok._0;
         j["value"] = value;
-        pactffi_free_string(result.ok);
+        pactffi_free_string(result.ok._0);
       } else {
-        std::string error = result.failed;
-        pactffi_free_string(result.failed);
+        std::string error = result.failed._0;
+        pactffi_free_string(result.failed._0);
         BOOST_THROW_EXCEPTION(std::runtime_error(error));
       }
     }
@@ -427,13 +427,13 @@ namespace pact_consumer::matchers {
     } else {
       j["pact:generator:type"] = "Regex";
       auto result = pactffi_generate_regex_value(regex);
-      if (result.tag == StringResult_Ok) {
-        std::string value = result.ok;
+      if (result.tag == StringResult::Tag::StringResult_Ok) {
+        std::string value = result.ok._0;
         j["value"] = value;
-        pactffi_free_string(result.ok);
+        pactffi_free_string(result.ok._0);
       } else {
-        std::string error = result.failed;
-        pactffi_free_string(result.failed);
+        std::string error = result.failed._0;
+        pactffi_free_string(result.failed._0);
         BOOST_THROW_EXCEPTION(std::runtime_error(error));
       }
     }
@@ -456,13 +456,13 @@ namespace pact_consumer::matchers {
     } else {
       j["pact:generator:type"] = "Regex";
       auto result = pactffi_generate_regex_value(regex);
-      if (result.tag == StringResult_Ok) {
-        std::string value = result.ok;
+      if (result.tag == StringResult::Tag::StringResult_Ok) {
+        std::string value = result.ok._0;
         j["value"] = value;
-        pactffi_free_string(result.ok);
+        pactffi_free_string(result.ok._0);
       } else {
-        std::string error = result.failed;
-        pactffi_free_string(result.failed);
+        std::string error = result.failed._0;
+        pactffi_free_string(result.failed._0);
         BOOST_THROW_EXCEPTION(std::runtime_error(error));
       }
     }

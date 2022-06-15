@@ -86,7 +86,7 @@ namespace pact_consumer {
     this->pact =  parent;
     this->description = description;
     this->interaction = pactffi_new_interaction(parent->pact, description);
-    if (this->interaction.interaction == 0) {
+    if (!this->interaction) {
       throw std::string("Could not create a new interaction with description ") + description;
     }
   }
@@ -125,19 +125,19 @@ namespace pact_consumer {
   Interaction Interaction::withHeaders(const std::unordered_map<std::string, std::vector<std::string>>& headers) const {
     for (auto& h : headers) {
       for (auto it = h.second.begin(); it != h.second.end(); it++) {
-        pactffi_with_header(this->interaction, InteractionPart_Request, h.first.data(), it - h.second.begin(), it->data());
+        pactffi_with_header(this->interaction, InteractionPart::InteractionPart_Request, h.first.data(), it - h.second.begin(), it->data());
       }
     }
     return *this;
   }
 
   Interaction Interaction::withBody(const std::string& body, const std::string& content_type) const {
-    pactffi_with_body(this->interaction, InteractionPart_Request, content_type.data(), body.data());
+    pactffi_with_body(this->interaction, InteractionPart::InteractionPart_Request, content_type.data(), body.data());
     return *this;
   }
 
   Interaction Interaction::withJsonBody(pact_consumer::matchers::IMatcher::Ptr body) const {
-    pactffi_with_body(this->interaction, InteractionPart_Request, "application/json;charset=UTF-8", 
+    pactffi_with_body(this->interaction, InteractionPart::InteractionPart_Request, "application/json;charset=UTF-8", 
       body->getJson().data());
     return *this;
   }
@@ -148,7 +148,7 @@ namespace pact_consumer {
     file.seekg(0, std::ios::beg);
     std::vector<char> buffer(size);
     if (file.read(buffer.data(), size)) {
-      pactffi_with_binary_file(this->interaction, InteractionPart_Request, content_type.data(), 
+      pactffi_with_binary_file(this->interaction, InteractionPart::InteractionPart_Request, content_type.data(), 
         (const uint8_t*)buffer.data(), size);
       return *this;
     } else {
@@ -157,11 +157,11 @@ namespace pact_consumer {
   }
 
   Interaction Interaction::withMultipartFileUpload(const std::string& part_name, const std::string& content_type, const std::filesystem::path& example_file) const {
-    auto result = pactffi_with_multipart_file(this->interaction, InteractionPart_Request, content_type.data(), 
+    auto result = pactffi_with_multipart_file(this->interaction, InteractionPart::InteractionPart_Request, content_type.data(), 
       example_file.string().data(), part_name.data());
-    if (result.tag == StringResult_Failed) {
-      std::string error = result.failed;
-      pactffi_free_string(result.failed);
+    if (result.tag == StringResult::Tag::StringResult_Failed) {
+      std::string error = result.failed._0;
+      pactffi_free_string(result.failed._0);
       BOOST_THROW_EXCEPTION(std::runtime_error(error));
     }
     return *this;
@@ -175,20 +175,20 @@ namespace pact_consumer {
   Interaction Interaction::withResponseHeaders(const std::unordered_map<std::string, std::vector<std::string>>& headers) const {
     for (auto h : headers) {
       for (auto it = h.second.begin(); it != h.second.end(); it++) {
-        pactffi_with_header(this->interaction, InteractionPart_Response, h.first.data(), it - h.second.begin(), it->data());
+        pactffi_with_header(this->interaction, InteractionPart::InteractionPart_Response, h.first.data(), it - h.second.begin(), it->data());
       }
     }
     return *this;
   }
 
   Interaction Interaction::withResponseBody(const std::string& body, const std::string& content_type) const {
-    pactffi_with_body(this->interaction, InteractionPart_Response, content_type.data(), 
+    pactffi_with_body(this->interaction, InteractionPart::InteractionPart_Response, content_type.data(), 
       body.data());
     return *this;
   }
 
   Interaction Interaction::withResponseJsonBody(pact_consumer::matchers::IMatcher::Ptr body) const {
-    pactffi_with_body(this->interaction, InteractionPart_Response, "application/json;charset=UTF-8", 
+    pactffi_with_body(this->interaction, InteractionPart::InteractionPart_Response, "application/json;charset=UTF-8", 
       body->getJson().data());
     return *this;
   }
@@ -199,7 +199,7 @@ namespace pact_consumer {
     file.seekg(0, std::ios::beg);
     std::vector<char> buffer(size);
     if (file.read(buffer.data(), size)) {
-      pactffi_with_binary_file(this->interaction, InteractionPart_Response, content_type.data(), 
+      pactffi_with_binary_file(this->interaction, InteractionPart::InteractionPart_Response, content_type.data(), 
         (const uint8_t*)buffer.data(), size);
       return *this;
     } else {
@@ -208,11 +208,11 @@ namespace pact_consumer {
   }
 
   Interaction Interaction::withResponseMultipartFileUpload(const std::string& part_name, const std::string& content_type, const std::filesystem::path& example_file) const {
-    auto result = pactffi_with_multipart_file(this->interaction, InteractionPart_Response, content_type.data(), 
+    auto result = pactffi_with_multipart_file(this->interaction, InteractionPart::InteractionPart_Response, content_type.data(), 
       example_file.string().data(), part_name.data());
-    if (result.tag == StringResult_Failed) {
-      std::string error = result.failed;
-      pactffi_free_string(result.failed);
+    if (result.tag == StringResult::Tag::StringResult_Failed) {
+      std::string error = result.failed._0;
+      pactffi_free_string(result.failed._0);
       BOOST_THROW_EXCEPTION(std::runtime_error(error));
     }
     return *this;

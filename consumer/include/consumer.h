@@ -3,7 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include "pact_ninjaone.h"
+#include <pact-c++.h>
 #include <filesystem>
 #include <optional>
 #include <functional>
